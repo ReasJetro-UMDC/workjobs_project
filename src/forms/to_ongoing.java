@@ -4,7 +4,6 @@
  */
 package forms;
 import static forms.appointment.ongoing_table;
-import static forms.appointment.pending_table;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,7 +13,6 @@ import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -26,9 +24,7 @@ public class to_ongoing extends javax.swing.JFrame {
     private static final String password = "1234" ;
     private static final String dataconn = "jdbc:mysql://127.0.0.1:3306/workjob" ; 
 
-    public static int getSelectedRow() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+   
 
    
    
@@ -47,11 +43,11 @@ public class to_ongoing extends javax.swing.JFrame {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         sql = DriverManager.getConnection(dataconn,username,password);
-        pst = sql.prepareStatement("select * from workjob");
+        pst = sql.prepareStatement("select * from ongoing_table");
         rs = pst.executeQuery();
         ResultSetMetaData stdata = rs.getMetaData();
         q = stdata.getColumnCount();
-        DefaultTableModel RecordTable = (DefaultTableModel)pending_table.getModel();
+        DefaultTableModel RecordTable = (DefaultTableModel)ongoing_table.getModel();
                 RecordTable.setRowCount(0);
         while (rs.next()){
             Vector columnData = new Vector();
@@ -60,12 +56,12 @@ public class to_ongoing extends javax.swing.JFrame {
             
              {  
                 
-                 columnData.add(rs.getString("check_in"));
-                 columnData.add(rs.getString("Time"));
-                 columnData.add(rs.getString("Customer_name"));
-                 columnData.add(rs.getString("Service_rendered"));
-                 columnData.add(rs.getString("Price"));
-                 columnData.add(rs.getString("Employee_Assigned"));
+                 columnData.add(rs.getString("ongoing_checkin"));
+                 columnData.add(rs.getString("ongoing_time"));
+                 columnData.add(rs.getString("ongoing_name"));
+                 columnData.add(rs.getString("ongoing_sr"));
+                 columnData.add(rs.getString("ongoing_price"));
+                 columnData.add(rs.getString("ongoing_employee"));
             }
             RecordTable.addRow(columnData);
         }        
@@ -123,7 +119,8 @@ public class to_ongoing extends javax.swing.JFrame {
         jLabel4.setText("Service Rendered");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, -1, -1));
 
-        done.setText("Done");
+        done.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        done.setText("DONE");
         done.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 doneActionPerformed(evt);
@@ -148,11 +145,12 @@ public class to_ongoing extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("To Ongoing");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 260, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 12, 260, 30));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 310, 310));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtcstname2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcstname2ActionPerformed

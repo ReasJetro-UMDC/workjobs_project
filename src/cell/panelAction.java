@@ -221,39 +221,8 @@ try {
     private void TAB_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TAB_addActionPerformed
         // TODO add your handling code here:
         
-       
-      
-          int index = pending_table.getSelectedRow();
-          TableModel model = pending_table.getModel();
-          
-          
-          String check_in = model.getValueAt(index, 0).toString();
-          String time = model.getValueAt(index,1).toString();
-          String customerN = model.getValueAt(index, 2).toString();
-          String SR = model.getValueAt(index, 3).toString();
-          String Price = model.getValueAt(index, 4).toString();
-          String EA = model.getValueAt(index, 5).toString();
-           
-        to_ongoing ongoingtb = new to_ongoing();
-        ongoingtb.setVisible(true);
-        ongoingtb.pack();
-        ongoingtb.setLocationRelativeTo(ongoingtb);
-        ongoingtb.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        ongoingtb.txtCheckin2.setText(check_in);
-        ongoingtb.txtTime2.setText(time);
-        ongoingtb.txtcstname2.setText(customerN);
-        ongoingtb.txtsr2.setText(SR);
-        ongoingtb.txtprice2.setText(Price);
-        ongoingtb.txtea2.setText(EA);
-        
-    
-         
-    
    
-    
-      
-
+   
     }//GEN-LAST:event_TAB_addActionPerformed
 
    

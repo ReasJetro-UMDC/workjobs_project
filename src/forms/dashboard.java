@@ -8,8 +8,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -27,43 +25,43 @@ public class dashboard extends javax.swing.JPanel {
     ResultSet rs = null;
     int q, i;
     
-    
+    DefaultTableModel model;
     public dashboard() {
         initComponents();
+       
     }
 
-    public void UpdateDb () {
+    public void UpdateDbpending () {
+   
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         sql = DriverManager.getConnection(dataconn,username,password);
         pst = sql.prepareStatement("select * from workjob");
         rs = pst.executeQuery();
-        ResultSetMetaData stdata = rs.getMetaData();
-        q = stdata.getColumnCount();
-        DefaultTableModel RecordTable = (DefaultTableModel)pending_table.getModel();
-                RecordTable.setRowCount(0);
-        while (rs.next()){
-            Vector columnData = new Vector();
-            
-            for ( i = 1; i < q; i++)
-            
-             {  
-                
-                 columnData.add(rs.getString("check_in"));
-                 columnData.add(rs.getString("Time"));
-                 columnData.add(rs.getString("Customer_name"));
-                 columnData.add(rs.getString("Service_rendered"));
-                 columnData.add(rs.getString("Price"));
-                 columnData.add(rs.getString("Employee_Assigned"));
-            }
-            RecordTable.addRow(columnData);
-        }        
+        
+       while (rs.next()){
+           String Date = rs.getString("check_in");
+           String Time = rs.getString("Time");
+           String Name = rs.getString("Customer_name");
+           String Works = rs.getString("Service_rendered");
+           String EmplooyeeAssigned = rs.getString("Price");
+           String Price = rs.getString("Employee_Assigned");
+           
+           
+           Object[] obj = {Date,Time,Name,Works,EmplooyeeAssigned,Price};
+           
+           model = (DefaultTableModel)pending_table.getModel();
+           model.addRow(obj);
+           
+           
+       }
     }
     catch (Exception e) {
         JOptionPane.showMessageDialog(null, e);
     }
     
 }
+
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -90,10 +88,7 @@ public class dashboard extends javax.swing.JPanel {
 
         pending_table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Checked in", "Time", "Customer Name", "Service Rendered", "Price", "Employee Assigned"
@@ -135,10 +130,7 @@ public class dashboard extends javax.swing.JPanel {
 
         ongoing_table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Checked in", "Time", "Customer Name", "Service Rendered", "Employee Assigned", "Price", "Employee Assigned"

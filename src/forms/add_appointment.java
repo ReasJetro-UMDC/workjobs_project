@@ -191,11 +191,11 @@ public class add_appointment extends javax.swing.JFrame {
     UpdateDb();
           dispose();
           
-} catch (ClassNotFoundException ex) {
-    ex.printStackTrace(); // Log the exception
+} catch (ClassNotFoundException ex) { // Log the exception
+            // Log the exception
     JOptionPane.showMessageDialog(this, "Database driver not found", "Error", JOptionPane.ERROR_MESSAGE);
-} catch (SQLException ex) {
-    ex.printStackTrace(); // Log the exception
+} catch (SQLException ex) { // Log the exception
+            // Log the exception
     JOptionPane.showMessageDialog(this, "Error inserting record: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 }
 

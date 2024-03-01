@@ -4,13 +4,12 @@
  */
 package forms;
 
-import static forms.appointment.pending_table;
+import cell.CellEditor;
+import cell.TableActionCellRender;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -28,7 +27,7 @@ private static final String username = "root" ;
     Connection sql = null;
     PreparedStatement pst  = null;
     ResultSet rs = null;
-    int q, i;
+    
     
     
     DefaultTableModel model;
@@ -37,6 +36,9 @@ private static final String username = "root" ;
      */
     public history() {
         initComponents();
+         history_table.getColumnModel().getColumn(5).setCellRenderer(new TableActionCellRender());
+        history_table.getColumnModel().getColumn(5).setCellEditor(new CellEditor());
+        
         UpdateDb ();
     }
     
@@ -45,21 +47,21 @@ private static final String username = "root" ;
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         sql = DriverManager.getConnection(dataconn,username,password);
-        pst = sql.prepareStatement("select * from history");
+        pst = sql.prepareStatement("select * from complete");
         rs = pst.executeQuery();
         
        while (rs.next()){
-           String Date = rs.getString("Check_in");
-           String Time = rs.getString("time");
-           String Name = rs.getString("Costumer Name");
-           String Works = rs.getString("Service_Rendered");
-           String EmplooyeeAssigned = rs.getString("price");
-           String Price = rs.getString("Emplooyee_Assigned");
+           String Date = rs.getString("Check_in_complete");
+           String Time = rs.getString("time_complete");
+           String Name = rs.getString("Costumer_Name_complete");
+           String Works = rs.getString("Service_Rendered_complete");
+           String EmplooyeeAssigned = rs.getString("price_complete");
+           String Price = rs.getString("Emplooyee_Assigned_complete");
            
            
            Object[] obj = {Date,Time,Name,Works,EmplooyeeAssigned,Price};
            
-           model = (DefaultTableModel)completed_table.getModel();
+           model = (DefaultTableModel)history_table.getModel();
            model.addRow(obj);
            
            
@@ -71,9 +73,9 @@ private static final String username = "root" ;
     
 }
  public void search(String str) {
-    model = (DefaultTableModel) completed_table.getModel();
+    model = (DefaultTableModel) history_table.getModel();
     TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
-    completed_table.setRowSorter(trs);
+    history_table.setRowSorter(trs);
     trs.setRowFilter(RowFilter.regexFilter(str));
     
  }
@@ -90,16 +92,16 @@ private static final String username = "root" ;
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        completed_table = new javax.swing.JTable();
         search_history = new javax.swing.JTextField();
         date_search = new com.toedter.calendar.JDateChooser();
+        jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setPreferredSize(new java.awt.Dimension(940, 610));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        completed_table.setModel(new javax.swing.table.DefaultTableModel(
+        history_table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -115,23 +117,32 @@ private static final String username = "root" ;
                 return canEdit [columnIndex];
             }
         });
-        completed_table.addAncestorListener(new javax.swing.event.AncestorListener() {
+        history_table.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                completed_tableAncestorAdded(evt);
+                history_tableAncestorAdded(evt);
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
-        jScrollPane1.setViewportView(completed_table);
+        jScrollPane1.setViewportView(history_table);
 
-        search_history.setText("  Search");
+        search_history.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                search_historyActionPerformed(evt);
+            }
+        });
         search_history.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 search_historyKeyReleased(evt);
             }
         });
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("HISTORY");
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -140,23 +151,29 @@ private static final String username = "root" ;
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 898, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(date_search, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
                         .addComponent(search_history, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 898, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(329, 329, 329)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(39, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(date_search, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(search_history, javax.swing.GroupLayout.Alignment.LEADING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(search_history, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(date_search, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -173,14 +190,14 @@ private static final String username = "root" ;
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(15, 15, 15))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void completed_tableAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_completed_tableAncestorAdded
+    private void history_tableAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_history_tableAncestorAdded
         // TODO add your handling code here:
-    }//GEN-LAST:event_completed_tableAncestorAdded
+    }//GEN-LAST:event_history_tableAncestorAdded
 
     private void search_historyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_historyKeyReleased
         // TODO add your handling code here:
@@ -189,10 +206,15 @@ private static final String username = "root" ;
         search(searchString);
     }//GEN-LAST:event_search_historyKeyReleased
 
+    private void search_historyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_historyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_historyActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable completed_table;
     private com.toedter.calendar.JDateChooser date_search;
+    public static final javax.swing.JTable history_table = new javax.swing.JTable();
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField search_history;

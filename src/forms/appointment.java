@@ -9,12 +9,7 @@ import cell.CellEditor;
 import java.awt.Component;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
-import static forms.add_appointment.txtCheckin;
-import static forms.add_appointment.txtTime;
-import static forms.add_appointment.txtcstname;
-import static forms.add_appointment.txtsr;
-import static forms.add_appointment.txtprice;
-import static forms.add_appointment.txtea;
+import static forms.complete.completed_table;
 import static forms.to_ongoing.txtCheckin2;
 import static forms.to_ongoing.txtTime2;
 import static forms.to_ongoing.txtcstname2;
@@ -22,13 +17,17 @@ import static forms.to_ongoing.txtea2;
 import static forms.to_ongoing.txtprice2;
 import static forms.to_ongoing.txtsr2;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
+import static forms.to_complete.txtCheckin3;
+import static forms.to_complete.txtTime3;
+import static forms.to_complete.txtcstname3;
+import static forms.to_complete.txtea3;
+import static forms.to_complete.txtprice3;
+import static forms.to_complete.txtsr3;
 
 
 public class appointment extends javax.swing.JPanel {
 
-    static void setDefaultCloseOperation(int DISPOSE_ON_CLOSE) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
     
    
@@ -61,9 +60,11 @@ public class appointment extends javax.swing.JPanel {
         pending_panel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
+        jButton2 = new javax.swing.JButton();
         ongoing_panel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -90,6 +91,7 @@ public class appointment extends javax.swing.JPanel {
                 "Check In", "Time", "Customer Name", "Service Rendered", "price", "Employee Assigned", "action"
             }
         ));
+        pending_table.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         pending_table.setRowHeight(40);
         pending_table.setSelectionBackground(new java.awt.Color(153, 153, 153));
         pending_table.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -99,12 +101,24 @@ public class appointment extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(pending_table);
 
+        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButton2.setText("ADD TO ONGOING");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pending_panelLayout = new javax.swing.GroupLayout(pending_panel);
         pending_panel.setLayout(pending_panelLayout);
         pending_panelLayout.setHorizontalGroup(
             pending_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pending_panelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(16, 16, 16))
         );
         pending_panelLayout.setVerticalGroup(
             pending_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,8 +126,10 @@ public class appointment extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addGap(20, 20, 20))
         );
 
         ongoing_panel.setBackground(new java.awt.Color(255, 255, 255));
@@ -131,15 +147,7 @@ public class appointment extends javax.swing.JPanel {
             new String [] {
                 "Checked in", "Time", "Customer Name", "Service Rendered", "Price", "Employee Assigned", "Action"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         ongoing_table.setRowHeight(40);
         ongoing_table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -148,12 +156,24 @@ public class appointment extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(ongoing_table);
 
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButton1.setText("ADD TO COMPLETE");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout ongoing_panelLayout = new javax.swing.GroupLayout(ongoing_panel);
         ongoing_panel.setLayout(ongoing_panelLayout);
         ongoing_panelLayout.setHorizontalGroup(
             ongoing_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 910, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ongoing_panelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(17, 17, 17))
         );
         ongoing_panelLayout.setVerticalGroup(
             ongoing_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,7 +181,10 @@ public class appointment extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -187,7 +210,8 @@ public class appointment extends javax.swing.JPanel {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        add_button.setText("Add");
+        add_button.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        add_button.setText("ADD TO PENDING");
         add_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 add_buttonActionPerformed(evt);
@@ -262,7 +286,7 @@ public class appointment extends javax.swing.JPanel {
                     .addComponent(add_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pending_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(15, 15, 15)
-                .addComponent(ongoing_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                .addComponent(ongoing_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                 .addGap(15, 15, 15))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -284,12 +308,12 @@ int selectedRow = pending_table.getSelectedRow();
 
 try {
     if (selectedRow != -1) { // Check if a row is selected
-        txtCheckin.setText(recordTable.getValueAt(selectedRow, 1).toString());
-        txtTime.setText(recordTable.getValueAt(selectedRow, 2).toString());
-        txtcstname.setText(recordTable.getValueAt(selectedRow, 3).toString());
-        txtsr.setText(recordTable.getValueAt(selectedRow, 4).toString());
-        txtprice.setText(recordTable.getValueAt(selectedRow, 5).toString());
-        txtea.setText(recordTable.getValueAt(selectedRow, 6).toString());
+        txtCheckin2.setText(recordTable.getValueAt(selectedRow, 1).toString());
+        txtTime2.setText(recordTable.getValueAt(selectedRow, 2).toString());
+        txtcstname2.setText(recordTable.getValueAt(selectedRow, 3).toString());
+        txtsr2.setText(recordTable.getValueAt(selectedRow, 4).toString());
+        txtprice2.setText(recordTable.getValueAt(selectedRow, 5).toString());
+        txtea2.setText(recordTable.getValueAt(selectedRow, 6).toString());
     } else {
         JOptionPane.showMessageDialog(this, "Please select a row.", "Warning", JOptionPane.WARNING_MESSAGE);
     }
@@ -306,19 +330,87 @@ int selectedRow = ongoing_table.getSelectedRow();
 
 try {
     if (selectedRow != -1) { // Check if a row is selected
-        txtCheckin2.setText(recordTable.getValueAt(selectedRow, 1).toString());
-        txtTime2.setText(recordTable.getValueAt(selectedRow, 2).toString());
-        txtcstname2.setText(recordTable.getValueAt(selectedRow, 3).toString());
-        txtsr2.setText(recordTable.getValueAt(selectedRow, 4).toString());
-        txtprice2.setText(recordTable.getValueAt(selectedRow, 5).toString());
-        txtea2.setText(recordTable.getValueAt(selectedRow, 6).toString());
+        txtCheckin3.setText(recordTable.getValueAt(selectedRow, 1).toString());
+        txtTime3.setText(recordTable.getValueAt(selectedRow, 2).toString());
+        txtcstname3.setText(recordTable.getValueAt(selectedRow, 3).toString());
+        txtsr3.setText(recordTable.getValueAt(selectedRow, 4).toString());
+        txtprice3.setText(recordTable.getValueAt(selectedRow, 5).toString());
+        txtea3.setText(recordTable.getValueAt(selectedRow, 6).toString());
     } else {
         JOptionPane.showMessageDialog(this, "Please select a row.", "Warning", JOptionPane.WARNING_MESSAGE);
     }
-} catch (NullPointerException ex) {
-    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-}
+} catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e);
+    }
+        
     }//GEN-LAST:event_ongoing_tableMouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        try {
+         int index = pending_table.getSelectedRow();
+          TableModel model = pending_table.getModel();
+          
+          
+          String check_in = model.getValueAt(index, 0).toString();
+          String time = model.getValueAt(index,1).toString();
+          String customerN = model.getValueAt(index, 2).toString();
+          String SR = model.getValueAt(index, 3).toString();
+          String Price = model.getValueAt(index, 4).toString();
+          String EA = model.getValueAt(index, 5).toString();
+           
+        to_ongoing ongoingtb = new to_ongoing();
+        ongoingtb.setVisible(true);
+        ongoingtb.pack();
+        ongoingtb.setLocationRelativeTo(ongoingtb);
+        ongoingtb.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        ongoingtb.txtCheckin2.setText(check_in);
+        ongoingtb.txtTime2.setText(time);
+        ongoingtb.txtcstname2.setText(customerN);
+        ongoingtb.txtsr2.setText(SR);
+        ongoingtb.txtprice2.setText(Price);
+        ongoingtb.txtea2.setText(EA);
+        
+        } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e);
+    }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+          try {
+         int index = ongoing_table.getSelectedRow();
+          TableModel model = ongoing_table.getModel();
+          
+          
+          String check_in = model.getValueAt(index, 0).toString();
+          String time = model.getValueAt(index,1).toString();
+          String customerN = model.getValueAt(index, 2).toString();
+          String SR = model.getValueAt(index, 3).toString();
+          String Price = model.getValueAt(index, 4).toString();
+          String EA = model.getValueAt(index, 5).toString();
+           
+        to_complete ongoingtb = new to_complete();
+        ongoingtb.setVisible(true);
+        ongoingtb.pack();
+        ongoingtb.setLocationRelativeTo(ongoingtb);
+        ongoingtb.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        ongoingtb.txtCheckin3.setText(check_in);
+        ongoingtb.txtTime3.setText(time);
+        ongoingtb.txtcstname3.setText(customerN);
+        ongoingtb.txtsr3.setText(SR);
+        ongoingtb.txtprice3.setText(Price);
+        ongoingtb.txtea3.setText(EA);
+        
+        } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e);
+    }
+
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 public static void AddRowToJTable(Object[]dataRow) {
     DefaultTableModel model = (DefaultTableModel)pending_table.getModel();
     model.addRow(dataRow);
@@ -330,9 +422,16 @@ public static void AddRowToJTable2(Object[]dataRow) {
     model2.addRow(dataRow);
     
 }
+public static void AddRowToJTable3(Object[]dataRow) {
+    DefaultTableModel model3 = (DefaultTableModel)completed_table.getModel();
+    model3.addRow(dataRow);
+    
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_button;
     private javax.swing.JPanel add_panel;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
