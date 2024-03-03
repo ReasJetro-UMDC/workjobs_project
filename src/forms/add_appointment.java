@@ -34,7 +34,7 @@ public class add_appointment extends javax.swing.JFrame {
     int q, i;
    
    
-    
+     DefaultTableModel model;
     
     public add_appointment() {
         initComponents();
@@ -172,7 +172,7 @@ public class add_appointment extends javax.swing.JFrame {
     
     
     
-   
+    
     if(name == null || work == null || assignedEmployee == null || serviceRendered == null || price == null || employee == null) {
        
         JOptionPane.showMessageDialog(this, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
@@ -187,9 +187,11 @@ public class add_appointment extends javax.swing.JFrame {
     pst.setString(6, employee);
     
     pst.executeUpdate();
+    
     JOptionPane.showMessageDialog(this, "Record Added");
     UpdateDb();
-          dispose();
+    
+    dispose();
           
 } catch (ClassNotFoundException ex) { // Log the exception
             // Log the exception

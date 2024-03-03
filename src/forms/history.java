@@ -4,30 +4,38 @@
  */
 package forms;
 
-import cell.CellEditor;
-import cell.TableActionCellRender;
+import javax.swing.RowFilter;
+import javax.swing.table.TableRowSorter;
+import static forms.to_complete.txtCheckin3;
+import static forms.to_complete.txtTime3;
+import static forms.to_complete.txtcstname3;
+import static forms.to_complete.txtea3;
+import static forms.to_complete.txtprice3;
+import static forms.to_complete.txtsr3;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.Vector;
 import javax.swing.JOptionPane;
-import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-
 /**
  *
  * @author Jake Marson Nable
  */
 public class history extends javax.swing.JPanel {
+    
 private static final String username = "root" ;
     private static final String password = "1234" ;
     private static final String dataconn = "jdbc:mysql://127.0.0.1:3306/workjob" ; 
     
     Connection sql = null;
-    PreparedStatement pst  = null;
+    PreparedStatement pst1  = null;
     ResultSet rs = null;
-    
+   
+    int p,r;
+     
     
     
     DefaultTableModel model;
@@ -36,36 +44,38 @@ private static final String username = "root" ;
      */
     public history() {
         initComponents();
-         history_table.getColumnModel().getColumn(5).setCellRenderer(new TableActionCellRender());
-        history_table.getColumnModel().getColumn(5).setCellEditor(new CellEditor());
         
-        UpdateDb ();
-    }
+       
+      }
     
-    
- public void UpdateDb () {
+    public void UpdateDb1 () {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         sql = DriverManager.getConnection(dataconn,username,password);
-        pst = sql.prepareStatement("select * from complete");
-        rs = pst.executeQuery();
         
-       while (rs.next()){
-           String Date = rs.getString("Check_in_complete");
-           String Time = rs.getString("time_complete");
-           String Name = rs.getString("Costumer_Name_complete");
-           String Works = rs.getString("Service_Rendered_complete");
-           String EmplooyeeAssigned = rs.getString("price_complete");
-           String Price = rs.getString("Emplooyee_Assigned_complete");
-           
-           
-           Object[] obj = {Date,Time,Name,Works,EmplooyeeAssigned,Price};
-           
-           model = (DefaultTableModel)history_table.getModel();
-           model.addRow(obj);
-           
-           
-       }
+        pst1 = sql.prepareStatement("select * from history");
+        rs = pst1.executeQuery();
+        ResultSetMetaData stdata = rs.getMetaData();
+        p = stdata.getColumnCount();
+        DefaultTableModel RecordTable = (DefaultTableModel)history_table.getModel();
+                RecordTable.setRowCount(0);
+        while (rs.next()){
+            Vector columnData = new Vector();
+            
+            for ( r = 1; r < p; r++)
+            
+             {  
+                
+                 columnData.add(rs.getString("Check_in"));
+                 columnData.add(rs.getString("time"));
+                 columnData.add(rs.getString("Costumer_Name"));
+                 columnData.add(rs.getString("Service_Rendered"));
+                 columnData.add(rs.getString("price"));
+                 columnData.add(rs.getString("Emplooyee_Assigned"));
+                 
+            }
+            RecordTable.addRow(columnData);
+        }        
     }
     catch (Exception e) {
         JOptionPane.showMessageDialog(null, e);
@@ -92,6 +102,7 @@ private static final String username = "root" ;
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
+        history_table = new javax.swing.JTable();
         search_history = new javax.swing.JTextField();
         date_search = new com.toedter.calendar.JDateChooser();
         jLabel1 = new javax.swing.JLabel();
@@ -106,17 +117,9 @@ private static final String username = "root" ;
 
             },
             new String [] {
-                "Check In", "Time", "Costumer Name", "Service Rendered", "Emplooyee Assigned", "Price"
+                "Check In", "Time", "Costumer Name", "Service Rendered", "Price", "Employee Assigned"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         history_table.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 history_tableAncestorAdded(evt);
@@ -124,6 +127,11 @@ private static final String username = "root" ;
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        history_table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                history_tableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(history_table);
@@ -149,32 +157,34 @@ private static final String username = "root" ;
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(329, 329, 329)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 898, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 20, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 851, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(date_search, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
                         .addComponent(search_history, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(329, 329, 329)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(33, 33, 33))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(search_history, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(date_search, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -210,12 +220,18 @@ private static final String username = "root" ;
         // TODO add your handling code here:
     }//GEN-LAST:event_search_historyActionPerformed
 
+    private void history_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_history_tableMouseClicked
+        // TODO add your handling code here:
+         
+        
+    }//GEN-LAST:event_history_tableMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser date_search;
-    public static final javax.swing.JTable history_table = new javax.swing.JTable();
+    public static javax.swing.JTable history_table;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
+    public static javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField search_history;
     // End of variables declaration//GEN-END:variables

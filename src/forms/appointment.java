@@ -304,7 +304,7 @@ public class appointment extends javax.swing.JPanel {
     private void pending_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pending_tableMouseClicked
         // TODO add your handling code here:
         DefaultTableModel recordTable = (DefaultTableModel) pending_table.getModel();
-int selectedRow = pending_table.getSelectedRow();
+        int selectedRow = pending_table.getSelectedRow();
 
 try {
     if (selectedRow != -1) { // Check if a row is selected
@@ -325,8 +325,8 @@ try {
 
     private void ongoing_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ongoing_tableMouseClicked
         // TODO add your handling code here:
-         DefaultTableModel recordTable = (DefaultTableModel) ongoing_table.getModel();
-int selectedRow = ongoing_table.getSelectedRow();
+         DefaultTableModel recordTable = (DefaultTableModel)ongoing_table.getModel();
+         int selectedRow = ongoing_table.getSelectedRow();
 
 try {
     if (selectedRow != -1) { // Check if a row is selected
@@ -350,7 +350,6 @@ try {
         try {
          int index = pending_table.getSelectedRow();
           TableModel model = pending_table.getModel();
-          
           
           String check_in = model.getValueAt(index, 0).toString();
           String time = model.getValueAt(index,1).toString();
@@ -404,6 +403,7 @@ try {
         ongoingtb.txtsr3.setText(SR);
         ongoingtb.txtprice3.setText(Price);
         ongoingtb.txtea3.setText(EA);
+        
         
         } catch (Exception e) {
         JOptionPane.showMessageDialog(null, e);

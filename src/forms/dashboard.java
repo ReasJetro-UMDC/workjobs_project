@@ -8,8 +8,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -21,7 +24,7 @@ public class dashboard extends javax.swing.JPanel {
     private static final String dataconn = "jdbc:mysql://127.0.0.1:3306/workjob" ; 
     
     Connection sql = null;
-    PreparedStatement pst  = null;
+    PreparedStatement pst,pst1  = null;
     ResultSet rs = null;
     int q, i;
     
@@ -30,40 +33,80 @@ public class dashboard extends javax.swing.JPanel {
         initComponents();
        
     }
-
-    public void UpdateDbpending () {
-   
+    public void UpdateDb () {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         sql = DriverManager.getConnection(dataconn,username,password);
         pst = sql.prepareStatement("select * from workjob");
         rs = pst.executeQuery();
-        
-       while (rs.next()){
-           String Date = rs.getString("check_in");
-           String Time = rs.getString("Time");
-           String Name = rs.getString("Customer_name");
-           String Works = rs.getString("Service_rendered");
-           String EmplooyeeAssigned = rs.getString("Price");
-           String Price = rs.getString("Employee_Assigned");
-           
-           
-           Object[] obj = {Date,Time,Name,Works,EmplooyeeAssigned,Price};
-           
-           model = (DefaultTableModel)pending_table.getModel();
-           model.addRow(obj);
-           
-           
-       }
+        ResultSetMetaData stdata = rs.getMetaData();
+        q = stdata.getColumnCount();
+        DefaultTableModel RecordTable = (DefaultTableModel)pending_table.getModel();
+                RecordTable.setRowCount(0);
+        while (rs.next()){
+            Vector columnData = new Vector();
+            
+            for ( i = 1; i < q; i++)
+            
+             {  
+                
+                 columnData.add(rs.getString("check_in"));
+                 columnData.add(rs.getString("Time"));
+                 columnData.add(rs.getString("Customer_name"));
+                 columnData.add(rs.getString("Service_rendered"));
+                 columnData.add(rs.getString("Price"));
+                 columnData.add(rs.getString("Employee_Assigned"));
+                 
+            }
+            RecordTable.addRow(columnData);
+            int index2 = pending_table.getSelectedRow();
+            TableModel model = pending_table.getModel();
+        }        
     }
     catch (Exception e) {
         JOptionPane.showMessageDialog(null, e);
     }
     
 }
-
     
-    @SuppressWarnings("unchecked")
+     public void UpdateDb1 () {
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        sql = DriverManager.getConnection(dataconn,username,password);
+        
+        pst1 = sql.prepareStatement("select * from ongoing_table");
+        rs = pst1.executeQuery();
+        ResultSetMetaData stdata = rs.getMetaData();
+        i = stdata.getColumnCount();
+        DefaultTableModel RecordTable = (DefaultTableModel)ongoing_table.getModel();
+                RecordTable.setRowCount(0);
+        while (rs.next()){
+            Vector columnData = new Vector();
+            
+            for ( i = 1; i < q; i++)
+            
+             {  
+                
+                 columnData.add(rs.getString("ongoing_checkin"));
+                 columnData.add(rs.getString("ongoing_time"));
+                 columnData.add(rs.getString("ongoing_name"));
+                 columnData.add(rs.getString("ongoing_sr"));
+                 columnData.add(rs.getString("ongoing_price"));
+                 columnData.add(rs.getString("ongoing_employee"));
+                
+            }
+             int index2 = ongoing_table.getSelectedRow();
+            TableModel model = ongoing_table.getModel();
+            RecordTable.addRow(columnData);
+        }        
+    }
+    catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e);
+    }
+    
+}
+ 
+  @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

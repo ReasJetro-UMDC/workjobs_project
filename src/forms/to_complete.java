@@ -4,6 +4,7 @@
  */
 package forms;
 import static forms.complete.completed_table;
+import static forms.history.history_table;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -24,8 +26,8 @@ public class to_complete extends javax.swing.JFrame {
     private static final String password = "1234" ;
     private static final String dataconn = "jdbc:mysql://127.0.0.1:3306/workjob" ; 
     
-     Connection sql = null;
-    PreparedStatement pst  = null;
+    Connection sql = null;
+    PreparedStatement pst,pst1  = null;
     ResultSet rs = null;
     int q, i;
     
@@ -39,8 +41,8 @@ public void UpdateDb () {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         sql = DriverManager.getConnection(dataconn,username,password);
-        pst = sql.prepareStatement("select * from complete");
-        rs = pst.executeQuery();
+        pst1 = sql.prepareStatement("select * from complete");
+        rs = pst1.executeQuery();
         ResultSetMetaData stdata = rs.getMetaData();
         q = stdata.getColumnCount();
         DefaultTableModel RecordTable = (DefaultTableModel)completed_table.getModel();
@@ -58,6 +60,41 @@ public void UpdateDb () {
                  columnData.add(rs.getString("Service_Rendered_complete"));
                  columnData.add(rs.getString("price_complete"));
                  columnData.add(rs.getString("Emplooyee_Assigned_complete"));
+                 
+            }
+            RecordTable.addRow(columnData);
+        }        
+    }
+    catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e);
+    }
+    
+}
+public void UpdateDb1 () {
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        sql = DriverManager.getConnection(dataconn,username,password);
+        
+        pst = sql.prepareStatement("select * from history");
+        rs = pst.executeQuery();
+        ResultSetMetaData stdata = rs.getMetaData();
+        q = stdata.getColumnCount();
+        DefaultTableModel RecordTable = (DefaultTableModel)history_table.getModel();
+                RecordTable.setRowCount(0);
+        while (rs.next()){
+            Vector columnData = new Vector();
+            
+            for ( i = 1; i < q; i++)
+            
+             {  
+                
+                 columnData.add(rs.getString("Check_in"));
+                 columnData.add(rs.getString("time"));
+                 columnData.add(rs.getString("Costumer_Name"));
+                 columnData.add(rs.getString("Service_Rendered"));
+                 columnData.add(rs.getString("price"));
+                 columnData.add(rs.getString("Emplooyee_Assigned"));
+                 
             }
             RecordTable.addRow(columnData);
         }        
@@ -175,9 +212,10 @@ public void UpdateDb () {
     private void doneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneActionPerformed
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection sql = DriverManager.getConnection(dataconn, username, password);
-            PreparedStatement pst = sql.prepareStatement("INSERT INTO complete (Check_in_complete, time_complete, Costumer_Name_complete, Service_Rendered_complete,price_complete,Emplooyee_Assigned_complete) VALUES (?,?,?,?,?,?) ");
-
+             sql = DriverManager.getConnection(dataconn, username, password);
+             pst1 = sql.prepareStatement("INSERT INTO complete (Check_in_complete, time_complete, Costumer_Name_complete, Service_Rendered_complete,price_complete,Emplooyee_Assigned_complete) VALUES (?,?,?,?,?,?) ");
+             pst = sql.prepareStatement("INSERT INTO history (Check_in, time, Costumer_Name, Service_Rendered, price, Emplooyee_Assigned) VALUES (?,?,?,?,?,?) ");
+            
             String name = txtCheckin3.getText();
             String work = txtTime3.getText();
             String assignedEmployee = txtcstname3.getText();
@@ -190,17 +228,34 @@ public void UpdateDb () {
                 JOptionPane.showMessageDialog(this, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+            
+            
+           
+            pst1.setString(1, name);
+            pst1.setString(2, work);
+            pst1.setString(3, assignedEmployee);
+            pst1.setString(4, serviceRendered);
+            pst1.setString(5, price);
+            pst1.setString(6, employee);
+            
             pst.setString(1, name);
             pst.setString(2, work);
             pst.setString(3, assignedEmployee);
             pst.setString(4, serviceRendered);
             pst.setString(5, price);
             pst.setString(6, employee);
-
+                
+           
+            
             pst.executeUpdate();
+            pst1.executeUpdate();
+         
             JOptionPane.showMessageDialog(this, "Record Added");
+            
+            UpdateDb1();
             UpdateDb();
+            
+    
             dispose();
 
         } catch (ClassNotFoundException ex) {

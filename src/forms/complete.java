@@ -12,7 +12,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Vector;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 /**
  *
  * @author Jake Marson Nable
@@ -78,6 +80,14 @@ private static final String username = "root" ;
     }
     
 }
+ 
+ public void search(String str) {
+    model = (DefaultTableModel) completed_table.getModel();
+    TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
+    completed_table.setRowSorter(trs);
+    trs.setRowFilter(RowFilter.regexFilter(str));
+    
+ }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -118,6 +128,11 @@ private static final String username = "root" ;
         search_complete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 search_completeActionPerformed(evt);
+            }
+        });
+        search_complete.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                search_completeKeyReleased(evt);
             }
         });
 
@@ -179,13 +194,18 @@ private static final String username = "root" ;
         
     }//GEN-LAST:event_completed_tableMouseClicked
 
+    private void search_completeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_completeKeyReleased
+    String searchString = search_complete.getText();
+        search(searchString);        // TODO add your handling code here:
+    }//GEN-LAST:event_search_completeKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JTable completed_table;
     private javax.swing.JLabel jLabel1;
     public static javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField search_complete;
+    public static javax.swing.JTextField search_complete;
     // End of variables declaration//GEN-END:variables
 
    
