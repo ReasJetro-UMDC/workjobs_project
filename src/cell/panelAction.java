@@ -22,8 +22,6 @@ import static forms.add_appointment.txtcstname;
 import static forms.add_appointment.txtsr;
 import static forms.add_appointment.txtprice;
 import static forms.add_appointment.txtea;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author Jake Marson Nable
@@ -134,41 +132,37 @@ public class panelAction extends javax.swing.JPanel {
     private void TAB_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TAB_deleteActionPerformed
         // TODO add your handling code here:
         
-    DefaultTableModel recordTable = (DefaultTableModel) pending_table.getModel();
-    int selectedRows = pending_table.getSelectedRow();
-    
-    
-try {  
-        id = Integer.parseInt(recordTable.getValueAt(selectedRows, 0).toString());
-        deleteItem = JOptionPane.showConfirmDialog(null, "Confirm if you want to delete item", "Warning", JOptionPane.YES_NO_OPTION);
-        if (deleteItem == JOptionPane.YES_OPTION) {
-            
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            sql = DriverManager.getConnection(dataconn, username, password);
-            pst = sql.prepareStatement("DELETE FROM workjob WHERE id= ?"); 
-            
-                pst.setInt(1, id);
-                pst.executeUpdate();
-                
-                JOptionPane.showMessageDialog(this, "Record deleted");
-                
-                 
-                txtCheckin.setText("");
-                txtCheckin.requestFocus();
-                txtTime.setText("");
-                txtcstname.setText("");
-                txtsr.setText("");
-                txtprice.setText("");
-                txtea.setText("");
-                   UpdateDb();       
-        }
-     
+   DefaultTableModel recordTable = (DefaultTableModel) pending_table.getModel();
+int selectedRow = pending_table.getSelectedRow();
 
-} catch (SQLException ex) {
-    JOptionPane.showMessageDialog(this, "Error deleting record: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-}       catch (ClassNotFoundException ex) {
-           Logger.getLogger(panelAction.class.getName()).log(Level.SEVERE, null, ex);
-       }
+if (selectedRow == -1) {
+    
+    JOptionPane.showMessageDialog(this, "Please select a row to delete", "No Row Selected", JOptionPane.WARNING_MESSAGE);
+    
+} else {
+    try {
+        
+        id = Integer.parseInt(recordTable.getValueAt(selectedRow, 0).toString());
+
+        
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        sql = DriverManager.getConnection(dataconn, username, password);
+        pst = sql.prepareStatement("DELETE FROM workjob WHERE id = ?");
+        pst.setInt(1, id);
+        pst.executeUpdate();
+        
+        pst.executeUpdate();
+        
+        recordTable.removeRow(selectedRow);
+          
+        JOptionPane.showMessageDialog(this, "Record Deleted");
+           
+             pst.executeUpdate();
+    } catch (ClassNotFoundException | SQLException | NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
 
     }//GEN-LAST:event_TAB_deleteActionPerformed
 
@@ -187,11 +181,14 @@ try {
     pst.setString(4, txtsr.getText());
     pst.setString(5, txtprice.getText());
     pst.setString(6, txtea.getText());  
+    pst.setInt(7, id);
     
+   
     pst.executeUpdate();
-    
     JOptionPane.showMessageDialog(this, "Record Updated");
-    UpdateDb();   
+     recordTable.setRowCount(0);
+     
+     
     }
     catch (ClassNotFoundException | SQLException | NumberFormatException ex) 
     {

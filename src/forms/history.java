@@ -6,12 +6,6 @@ package forms;
 
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
-import static forms.to_complete.txtCheckin3;
-import static forms.to_complete.txtTime3;
-import static forms.to_complete.txtcstname3;
-import static forms.to_complete.txtea3;
-import static forms.to_complete.txtprice3;
-import static forms.to_complete.txtsr3;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

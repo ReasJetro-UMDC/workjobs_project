@@ -28,7 +28,7 @@ public class dashboard extends javax.swing.JPanel {
     ResultSet rs = null;
     int q, i;
     
-    DefaultTableModel model;
+    
     public dashboard() {
         initComponents();
        
@@ -39,10 +39,14 @@ public class dashboard extends javax.swing.JPanel {
         sql = DriverManager.getConnection(dataconn,username,password);
         pst = sql.prepareStatement("select * from workjob");
         rs = pst.executeQuery();
+        
         ResultSetMetaData stdata = rs.getMetaData();
+        
         q = stdata.getColumnCount();
+        
         DefaultTableModel RecordTable = (DefaultTableModel)pending_table.getModel();
                 RecordTable.setRowCount(0);
+                
         while (rs.next()){
             Vector columnData = new Vector();
             
@@ -59,8 +63,7 @@ public class dashboard extends javax.swing.JPanel {
                  
             }
             RecordTable.addRow(columnData);
-            int index2 = pending_table.getSelectedRow();
-            TableModel model = pending_table.getModel();
+            
         }        
     }
     catch (Exception e) {
@@ -71,16 +74,21 @@ public class dashboard extends javax.swing.JPanel {
     
      public void UpdateDb1 () {
     try {
+        
         Class.forName("com.mysql.cj.jdbc.Driver");
         sql = DriverManager.getConnection(dataconn,username,password);
-        
         pst1 = sql.prepareStatement("select * from ongoing_table");
         rs = pst1.executeQuery();
+        
         ResultSetMetaData stdata = rs.getMetaData();
+        
         i = stdata.getColumnCount();
+        
         DefaultTableModel RecordTable = (DefaultTableModel)ongoing_table.getModel();
                 RecordTable.setRowCount(0);
+                
         while (rs.next()){
+            
             Vector columnData = new Vector();
             
             for ( i = 1; i < q; i++)
@@ -95,8 +103,7 @@ public class dashboard extends javax.swing.JPanel {
                  columnData.add(rs.getString("ongoing_employee"));
                 
             }
-             int index2 = ongoing_table.getSelectedRow();
-            TableModel model = ongoing_table.getModel();
+             
             RecordTable.addRow(columnData);
         }        
     }

@@ -29,6 +29,8 @@ public class main extends javax.swing.JFrame {
     }
     
     private void forms(Component com){
+        
+        
         form_frames.removeAll();
         form_frames.add(com);
         repaint();
@@ -57,6 +59,7 @@ public class main extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         form_frames = new javax.swing.JPanel();
+        dashboard1 = new forms.dashboard();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -215,6 +218,8 @@ public class main extends javax.swing.JFrame {
 
         form_frames.setBackground(new java.awt.Color(204, 204, 204));
         form_frames.setLayout(new java.awt.BorderLayout());
+        form_frames.add(dashboard1, java.awt.BorderLayout.CENTER);
+
         jPanel2.add(form_frames, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 90, 940, 610));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -285,6 +290,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton appointment_button;
     private javax.swing.JButton close_button;
     private javax.swing.JButton complete_button;
+    private forms.dashboard dashboard1;
     private javax.swing.JButton dashboard_button;
     private javax.swing.JPanel form_frames;
     private javax.swing.JButton history_button;
