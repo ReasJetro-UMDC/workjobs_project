@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -33,85 +34,74 @@ public class dashboard extends javax.swing.JPanel {
         initComponents();
        
     }
-    public void UpdateDb () {
+   public void UpdateDb() {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        sql = DriverManager.getConnection(dataconn,username,password);
-        pst = sql.prepareStatement("select * from workjob");
-        rs = pst.executeQuery();
-        
-        ResultSetMetaData stdata = rs.getMetaData();
-        
-        q = stdata.getColumnCount();
-        
-        DefaultTableModel RecordTable = (DefaultTableModel)pending_table.getModel();
-                RecordTable.setRowCount(0);
-                
-        while (rs.next()){
-            Vector columnData = new Vector();
-            
-            for ( i = 1; i < q; i++)
-            
-             {  
-                
-                 columnData.add(rs.getString("check_in"));
-                 columnData.add(rs.getString("Time"));
-                 columnData.add(rs.getString("Customer_name"));
-                 columnData.add(rs.getString("Service_rendered"));
-                 columnData.add(rs.getString("Price"));
-                 columnData.add(rs.getString("Employee_Assigned"));
-                 
+        Connection sql = DriverManager.getConnection(dataconn, username, password);
+        PreparedStatement pst = sql.prepareStatement("select * from workjob");
+        ResultSet rs = pst.executeQuery();
+
+        DefaultTableModel recordTable = (DefaultTableModel) pending_table1.getModel();
+        recordTable.setRowCount(0); // Clear existing rows before adding new ones
+
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        while (rs.next()) {
+            Vector<Object> rowData = new Vector<>();
+
+            // Iterate through each column and add its value to the row data
+            for (int i = 1; i <= columnCount; i++) {
+                rowData.add(rs.getObject(i)); // Add column value to row data
             }
-            RecordTable.addRow(columnData);
-            
-        }        
+
+            // Add the row data to the table model
+            recordTable.addRow(rowData);
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-    catch (Exception e) {
-        JOptionPane.showMessageDialog(null, e);
-    }
-    
 }
+
     
-     public void UpdateDb1 () {
+    public void UpdateDb1() {
     try {
-        
         Class.forName("com.mysql.cj.jdbc.Driver");
-        sql = DriverManager.getConnection(dataconn,username,password);
+        sql = DriverManager.getConnection(dataconn, username, password);
         pst1 = sql.prepareStatement("select * from ongoing_table");
         rs = pst1.executeQuery();
-        
-        ResultSetMetaData stdata = rs.getMetaData();
-        
-        i = stdata.getColumnCount();
-        
-        DefaultTableModel RecordTable = (DefaultTableModel)ongoing_table.getModel();
-                RecordTable.setRowCount(0);
-                
-        while (rs.next()){
-            
-            Vector columnData = new Vector();
-            
-            for ( i = 1; i < q; i++)
-            
-             {  
-                
-                 columnData.add(rs.getString("ongoing_checkin"));
-                 columnData.add(rs.getString("ongoing_time"));
-                 columnData.add(rs.getString("ongoing_name"));
-                 columnData.add(rs.getString("ongoing_sr"));
-                 columnData.add(rs.getString("ongoing_price"));
-                 columnData.add(rs.getString("ongoing_employee"));
-                
+
+        DefaultTableModel recordTable = (DefaultTableModel) ongoing_table1.getModel();
+        recordTable.setRowCount(0); // Clear existing rows before adding new ones
+
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        while (rs.next()) {
+            Vector rowData = new Vector();
+
+            // Iterate through each column and add its value to the row data
+            for (int i = 1; i <= columnCount; i++) {
+                rowData.add(rs.getString(i)); // Add column value to row data
             }
-             
-            RecordTable.addRow(columnData);
-        }        
+
+            // Add the row data to the table model
+            recordTable.addRow(rowData);
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        // Close resources in finally block
+        try {
+            if (rs != null) rs.close();
+            if (pst1 != null) pst1.close();
+            if (sql != null) sql.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-    catch (Exception e) {
-        JOptionPane.showMessageDialog(null, e);
-    }
-    
 }
+
  
   @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -120,11 +110,11 @@ public class dashboard extends javax.swing.JPanel {
         pending_panel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        pending_table = new javax.swing.JTable();
+        pending_table1 = new javax.swing.JTable();
         ongoing_panel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        ongoing_table = new javax.swing.JTable();
+        ongoing_table1 = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setPreferredSize(new java.awt.Dimension(940, 610));
@@ -136,7 +126,7 @@ public class dashboard extends javax.swing.JPanel {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Pending");
 
-        pending_table.setModel(new javax.swing.table.DefaultTableModel(
+        pending_table1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -152,7 +142,7 @@ public class dashboard extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(pending_table);
+        jScrollPane1.setViewportView(pending_table1);
 
         javax.swing.GroupLayout pending_panelLayout = new javax.swing.GroupLayout(pending_panel);
         pending_panel.setLayout(pending_panelLayout);
@@ -178,7 +168,7 @@ public class dashboard extends javax.swing.JPanel {
         jLabel2.setText("Ongoing");
         jLabel2.setPreferredSize(new java.awt.Dimension(94, 182));
 
-        ongoing_table.setModel(new javax.swing.table.DefaultTableModel(
+        ongoing_table1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -194,7 +184,7 @@ public class dashboard extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(ongoing_table);
+        jScrollPane2.setViewportView(ongoing_table1);
 
         javax.swing.GroupLayout ongoing_panelLayout = new javax.swing.GroupLayout(ongoing_panel);
         ongoing_panel.setLayout(ongoing_panelLayout);
@@ -241,8 +231,8 @@ public class dashboard extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel ongoing_panel;
-    public static javax.swing.JTable ongoing_table;
+    public static javax.swing.JTable ongoing_table1;
     private javax.swing.JPanel pending_panel;
-    public static javax.swing.JTable pending_table;
+    public static javax.swing.JTable pending_table1;
     // End of variables declaration//GEN-END:variables
 }

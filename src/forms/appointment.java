@@ -303,45 +303,70 @@ public class appointment extends javax.swing.JPanel {
 
     private void pending_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pending_tableMouseClicked
         // TODO add your handling code here:
-        DefaultTableModel recordTable = (DefaultTableModel) pending_table.getModel();
-        int selectedRow = pending_table.getSelectedRow();
+       try {
+    DefaultTableModel recordTable = (DefaultTableModel) pending_table.getModel();
+    int selectedRow = pending_table.getSelectedRow();
 
-try {
-    if (selectedRow != -1) { // Check if a row is selected
-        txtCheckin2.setText(recordTable.getValueAt(selectedRow, 1).toString());
-        txtTime2.setText(recordTable.getValueAt(selectedRow, 2).toString());
-        txtcstname2.setText(recordTable.getValueAt(selectedRow, 3).toString());
-        txtsr2.setText(recordTable.getValueAt(selectedRow, 4).toString());
-        txtprice2.setText(recordTable.getValueAt(selectedRow, 5).toString());
-        txtea2.setText(recordTable.getValueAt(selectedRow, 6).toString());
+    if (selectedRow != -1 && selectedRow < recordTable.getRowCount()) { // Check if a row is selected and within bounds
+        // Retrieve data from the selected row
+        Object checkinValue = recordTable.getValueAt(selectedRow, 0); // Assuming the index of check-in is 0
+        Object timeValue = recordTable.getValueAt(selectedRow, 1); // Assuming the index of time is 1
+        Object cstnameValue = recordTable.getValueAt(selectedRow, 2); // Assuming the index of customer name is 2
+        Object srValue = recordTable.getValueAt(selectedRow, 3); // Assuming the index of service rendered is 3
+        Object priceValue = recordTable.getValueAt(selectedRow, 4); // Assuming the index of price is 4
+        Object eaValue = recordTable.getValueAt(selectedRow, 5); // Assuming the index of employee assigned is 5
+
+        // Populate text fields with retrieved data
+        txtCheckin2.setText(checkinValue != null ? checkinValue.toString() : "");
+        txtTime2.setText(timeValue != null ? timeValue.toString() : "");
+        txtcstname2.setText(cstnameValue != null ? cstnameValue.toString() : "");
+        txtsr2.setText(srValue != null ? srValue.toString() : "");
+        txtprice2.setText(priceValue != null ? priceValue.toString() : "");
+        txtea2.setText(eaValue != null ? eaValue.toString() : "");
     } else {
-        JOptionPane.showMessageDialog(this, "Please select a row.", "Warning", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Please select a valid row.", "Warning", JOptionPane.WARNING_MESSAGE);
     }
-} catch (NullPointerException ex) {
+} catch (Exception ex) {
     JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+    ex.printStackTrace(); // Print stack trace for debugging
 }
+
+
+
+
+
            
     }//GEN-LAST:event_pending_tableMouseClicked
 
     private void ongoing_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ongoing_tableMouseClicked
         // TODO add your handling code here:
-         DefaultTableModel recordTable = (DefaultTableModel)ongoing_table.getModel();
-         int selectedRow = ongoing_table.getSelectedRow();
+          try {
+    DefaultTableModel recordTable = (DefaultTableModel) ongoing_table.getModel();
+    int selectedRow = ongoing_table.getSelectedRow();
 
-try {
-    if (selectedRow != -1) { // Check if a row is selected
-        txtCheckin3.setText(recordTable.getValueAt(selectedRow, 1).toString());
-        txtTime3.setText(recordTable.getValueAt(selectedRow, 2).toString());
-        txtcstname3.setText(recordTable.getValueAt(selectedRow, 3).toString());
-        txtsr3.setText(recordTable.getValueAt(selectedRow, 4).toString());
-        txtprice3.setText(recordTable.getValueAt(selectedRow, 5).toString());
-        txtea3.setText(recordTable.getValueAt(selectedRow, 6).toString());
+    if (selectedRow != -1 && selectedRow < recordTable.getRowCount()) { // Check if a row is selected and within bounds
+        // Retrieve data from the selected row
+        Object checkinValue = recordTable.getValueAt(selectedRow, 1);
+        Object timeValue = recordTable.getValueAt(selectedRow, 2);
+        Object cstnameValue = recordTable.getValueAt(selectedRow, 3);
+        Object srValue = recordTable.getValueAt(selectedRow, 4);
+        Object priceValue = recordTable.getValueAt(selectedRow, 5);
+        Object eaValue = recordTable.getValueAt(selectedRow, 6);
+
+        // Populate text fields with retrieved data
+        txtCheckin2.setText(checkinValue != null ? checkinValue.toString() : "");
+        txtTime2.setText(timeValue != null ? timeValue.toString() : "");
+        txtcstname2.setText(cstnameValue != null ? cstnameValue.toString() : "");
+        txtsr2.setText(srValue != null ? srValue.toString() : "");
+        txtprice2.setText(priceValue != null ? priceValue.toString() : "");
+        txtea2.setText(eaValue != null ? eaValue.toString() : "");
     } else {
-        JOptionPane.showMessageDialog(this, "Please select a row.", "Warning", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Please select a valid row.", "Warning", JOptionPane.WARNING_MESSAGE);
     }
-} catch (Exception e) {
-        JOptionPane.showMessageDialog(null, e);
-    }
+} catch (Exception ex) {
+    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+    ex.printStackTrace(); // Print stack trace for debugging
+}
         
     }//GEN-LAST:event_ongoing_tableMouseClicked
 

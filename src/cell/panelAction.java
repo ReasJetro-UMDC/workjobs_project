@@ -36,50 +36,36 @@ public class panelAction extends javax.swing.JPanel {
     PreparedStatement pst  = null;
     ResultSet rs = null;
     int i, q, id;
-    int deleteItem ;  
+    
   /**
      * Creates new form panelAction
      */
     public panelAction() {
         initComponents();
     }
- public void UpdateDb () {
+ public void UpdateDb() {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        sql = DriverManager.getConnection(dataconn,username,password);
-        pst = sql.prepareStatement("select * from workjob");
-        
+        sql = DriverManager.getConnection(dataconn, username, password);
+        pst = sql.prepareStatement("SELECT * FROM workjob");
         rs = pst.executeQuery();
-        ResultSetMetaData stdata = rs.getMetaData();
-        
-        q = stdata.getColumnCount();
-        
-        DefaultTableModel RecordTable = (DefaultTableModel)pending_table.getModel();
+        DefaultTableModel RecordTable = (DefaultTableModel) pending_table.getModel();
         RecordTable.setRowCount(0);
-        while (rs.next()){
-            Vector columnData = new Vector();
-            
-            for ( i = 1; i < q; i++)
-            
-             {  
-                
-                 columnData.add(rs.getString("check_in"));
-                 columnData.add(rs.getString("Time"));
-                 columnData.add(rs.getString("Customer_name"));
-                 columnData.add(rs.getString("Service_rendered"));
-                 columnData.add(rs.getString("Price"));
-                 columnData.add(rs.getString("Employee_Assigned"));
+        ResultSetMetaData stdata = rs.getMetaData();
+        q = stdata.getColumnCount();
+        while (rs.next()) {
+            Vector<String> columnData = new Vector<>();
+            for ( i = 1; i <= q; i++) { // Corrected the loop condition
+                columnData.add(rs.getString(i)); // Using index i to retrieve column data
             }
             RecordTable.addRow(columnData);
-          
-        }   
-        
+        }
+        // Close the connection after using it
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e.getMessage()); // Displaying error message
     }
-    catch (Exception e) {
-        JOptionPane.showMessageDialog(null, e);
-    }
-    
 }
+
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -132,69 +118,78 @@ public class panelAction extends javax.swing.JPanel {
     private void TAB_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TAB_deleteActionPerformed
         // TODO add your handling code here:
         
-   DefaultTableModel recordTable = (DefaultTableModel) pending_table.getModel();
-int selectedRow = pending_table.getSelectedRow();
+  try {
+    DefaultTableModel recordTable = (DefaultTableModel) pending_table.getModel();
+    int selectedRow = pending_table.getSelectedRow();
 
-if (selectedRow == -1) {
-    
-    JOptionPane.showMessageDialog(this, "Please select a row to delete", "No Row Selected", JOptionPane.WARNING_MESSAGE);
-    
-} else {
-    try {
-        
-        id = Integer.parseInt(recordTable.getValueAt(selectedRow, 0).toString());
+    if (selectedRow != -1) { // Check if a row is selected
+        // Extract the ID from the selected row
+        int id = Integer.parseInt(recordTable.getValueAt(selectedRow, 0).toString());
 
-        
+        // Delete the record with the corresponding ID from the database
         Class.forName("com.mysql.cj.jdbc.Driver");
-        sql = DriverManager.getConnection(dataconn, username, password);
-        pst = sql.prepareStatement("DELETE FROM workjob WHERE id = ?");
-        pst.setInt(1, id);
-        pst.executeUpdate();
-        
-        pst.executeUpdate();
-        
+        try (Connection sql = DriverManager.getConnection(dataconn, username, password);
+             PreparedStatement pst = sql.prepareStatement("DELETE FROM workjob WHERE id = ?")) {
+            pst.setInt(1, id);
+            pst.executeUpdate();
+        }
+
+        // Remove the selected row from the table model
         recordTable.removeRow(selectedRow);
-          
+
+        // Notify the user
         JOptionPane.showMessageDialog(this, "Record Deleted");
-           
-             pst.executeUpdate();
-    } catch (ClassNotFoundException | SQLException | NumberFormatException ex) {
-        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+
+        // Update the database if necessary
+        UpdateDb();
+
+        // Clear the selection or set it to another row
+        pending_table.clearSelection();
+    } else {
+        JOptionPane.showMessageDialog(this, "Please select a row.", "Warning", JOptionPane.WARNING_MESSAGE);
     }
+} catch (ClassNotFoundException | SQLException | NumberFormatException ex) {
+    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 }
-
-
     }//GEN-LAST:event_TAB_deleteActionPerformed
 
     private void TAB_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TAB_editActionPerformed
-       DefaultTableModel recordTable = (DefaultTableModel) pending_table.getModel();
-       int selectedRow = pending_table.getSelectedRow();    
-    try {
-        id = Integer.parseInt(recordTable.getValueAt(selectedRow, 0).toString());
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        sql = DriverManager.getConnection(dataconn, username, password);
-        pst = sql.prepareStatement("UPDATE workjob SET check_in = ?, Time = ?, Customer_name = ?, Service_rendered = ?, Price = ?, Employee_Assigned = ? WHERE id = ?");
-     
-    pst.setString(1, txtCheckin.getText());
-    pst.setString(2, txtTime.getText());
-    pst.setString(3, txtcstname.getText());
-    pst.setString(4, txtsr.getText());
-    pst.setString(5, txtprice.getText());
-    pst.setString(6, txtea.getText());  
-    pst.setInt(7, id);
+       try {
+    DefaultTableModel recordTable = (DefaultTableModel) pending_table.getModel();
+    int selectedRow = pending_table.getSelectedRow();
     
-   
-    pst.executeUpdate();
-    JOptionPane.showMessageDialog(this, "Record Updated");
-     recordTable.setRowCount(0);
-     
-     
-    }
-    catch (ClassNotFoundException | SQLException | NumberFormatException ex) 
-    {
-        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-}
+    if (selectedRow != -1) { // Check if a row is selected
+        int id = Integer.parseInt(recordTable.getValueAt(selectedRow, 0).toString());
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection sql = DriverManager.getConnection(dataconn, username, password);
+        PreparedStatement pst = sql.prepareStatement("UPDATE workjob SET check_in = ?, Time = ?, Customer_name = ?, Service_rendered = ?, Price = ?, Employee_Assigned = ? WHERE id = ?");
+        
+        pst.setString(1, txtCheckin.getText());
+        pst.setString(2, txtTime.getText());
+        pst.setString(3, txtcstname.getText());
+        pst.setString(4, txtsr.getText());
+        pst.setString(5, txtprice.getText());
+        pst.setString(6, txtea.getText());  
+        pst.setInt(7, id);
 
+        int rowsAffected = pst.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(this, "Record Updated");
+            recordTable.setRowCount(0);
+            UpdateDb(); // Refresh the table data
+        } else {
+            JOptionPane.showMessageDialog(this, "No record was updated.", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        pst.close();
+        sql.close();
+    } else {
+        JOptionPane.showMessageDialog(this, "Please select a row to update.", "Warning", JOptionPane.WARNING_MESSAGE);
+    }
+} catch (ClassNotFoundException | SQLException | NumberFormatException ex) {
+    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+    ex.printStackTrace(); // Print stack trace for debugging
+}
 
 
         // TODO add your handling code here:

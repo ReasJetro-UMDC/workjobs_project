@@ -5,6 +5,8 @@
 package forms;
 
 import static forms.appointment.pending_table;
+import static forms.dashboard.ongoing_table1;
+import static forms.dashboard.pending_table1;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -35,42 +37,62 @@ public class add_appointment extends javax.swing.JFrame {
    
    
      DefaultTableModel model;
-    
+   
     public add_appointment() {
         initComponents();
     }
-    public void UpdateDb () {
-    try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        sql = DriverManager.getConnection(dataconn,username,password);
-        pst = sql.prepareStatement("select * from workjob");
-        rs = pst.executeQuery();
-        ResultSetMetaData stdata = rs.getMetaData();
-        q = stdata.getColumnCount();
-        DefaultTableModel RecordTable = (DefaultTableModel)pending_table.getModel();
-                RecordTable.setRowCount(0);
-        while (rs.next()){
-            Vector columnData = new Vector();
-            
-            for ( i = 1; i < q; i++)
-            
-             {  
-                
-                 columnData.add(rs.getString("check_in"));
-                 columnData.add(rs.getString("Time"));
-                 columnData.add(rs.getString("Customer_name"));
-                 columnData.add(rs.getString("Service_rendered"));
-                 columnData.add(rs.getString("Price"));
-                 columnData.add(rs.getString("Employee_Assigned"));
+    public void UpdateDb() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection sql = DriverManager.getConnection(dataconn, username, password);
+            PreparedStatement pst = sql.prepareStatement("select * from workjob");
+            ResultSet rs = pst.executeQuery();
+            ResultSetMetaData stdata = rs.getMetaData();
+            int q = stdata.getColumnCount();
+
+            DefaultTableModel RecordTable1 = (DefaultTableModel) pending_table.getModel();
+            DefaultTableModel RecordTable2 = (DefaultTableModel) pending_table1.getModel();
+            DefaultTableModel RecordTable3 = (DefaultTableModel) ongoing_table1.getModel();
+            RecordTable1.setRowCount(0);
+            RecordTable2.setRowCount(0);
+            RecordTable3.setRowCount(0);
+
+            while (rs.next()) {
+                Vector<Object> columnData1 = new Vector<>();
+                Vector<Object> columnData2 = new Vector<>();
+                Vector<Object> columnData3 = new Vector<>();
+
+                // Add data to the first table
+                columnData1.add(rs.getString("check_in"));
+                columnData1.add(rs.getString("Time"));
+                columnData1.add(rs.getString("Customer_name"));
+                columnData1.add(rs.getString("Service_rendered"));
+                columnData1.add(rs.getString("Price"));
+                columnData1.add(rs.getString("Employee_Assigned"));
+                RecordTable1.addRow(columnData1);
+
+                // Add data to the second table
+                columnData2.add(rs.getString("check_in"));
+                columnData2.add(rs.getString("Time"));
+                columnData2.add(rs.getString("Customer_name"));
+                columnData2.add(rs.getString("Service_rendered"));
+                columnData2.add(rs.getString("Price"));
+                columnData2.add(rs.getString("Employee_Assigned"));
+                RecordTable2.addRow(columnData2);
+
+                // Add data to the third table
+                columnData3.add(rs.getString("check_in"));
+                columnData3.add(rs.getString("Time"));
+                columnData3.add(rs.getString("Customer_name"));
+                columnData3.add(rs.getString("Service_rendered"));
+                columnData3.add(rs.getString("Price"));
+                columnData3.add(rs.getString("Employee_Assigned"));
+                RecordTable3.addRow(columnData3);
             }
-            RecordTable.addRow(columnData);
-        }        
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-    catch (Exception e) {
-        JOptionPane.showMessageDialog(null, e);
-    }
-    
-}
     
     
 
