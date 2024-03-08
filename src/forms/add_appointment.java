@@ -7,14 +7,19 @@ package forms;
 import static forms.appointment.pending_table;
 import static forms.dashboard.ongoing_table1;
 import static forms.dashboard.pending_table1;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -40,6 +45,8 @@ public class add_appointment extends javax.swing.JFrame {
    
     public add_appointment() {
         initComponents();
+        time();
+        date();
     }
     public void UpdateDb() {
         try {
@@ -221,14 +228,37 @@ public class add_appointment extends javax.swing.JFrame {
 } catch (SQLException ex) { // Log the exception
             // Log the exception
     JOptionPane.showMessageDialog(this, "Error inserting record: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-}
-
-        
-        
-        
-    
+}   
     }//GEN-LAST:event_doneActionPerformed
 
+    // for time
+    Timer t;
+    SimpleDateFormat st;    
+    public void time() {
+        
+        t = new Timer(0,new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Date dt = new Date();
+                st = new SimpleDateFormat("hh:mm a");
+                
+                String tt = st.format(dt);
+                txtTime.setText(tt);
+            }
+        });
+        t.start();
+    }
+    
+    //for date
+    public void date(){
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM-dd-YYYY");
+        
+        String dd = sdf.format(d);
+        txtCheckin.setText(dd);
+    }
+    
+    
     private void txtcstnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcstnameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtcstnameActionPerformed
