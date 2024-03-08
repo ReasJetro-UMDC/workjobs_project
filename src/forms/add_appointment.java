@@ -252,7 +252,7 @@ public class add_appointment extends javax.swing.JFrame {
     //for date
     public void date(){
         Date d = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM-dd-YYYY");
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, YYYY");
         
         String dd = sdf.format(d);
         txtCheckin.setText(dd);
